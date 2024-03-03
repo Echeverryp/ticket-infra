@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "s3_front" {
   bucket = "${var.layer}-${var.stack_id}-bucket-front"
-
+  acl    = "private"
   tags = {
     Name        = "Front bucket"
     Environment = "${var.stack_id}"
