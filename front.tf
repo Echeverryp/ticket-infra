@@ -7,12 +7,12 @@ resource "aws_s3_bucket" "s3_front" {
   }
 }
 
-resource "aws_s3_bucket" "artifacts_bucket" {
-  bucket = "${var.layer}-${var.stack_id}-artifacts-bucket"
+resource "aws_s3_bucket" "images_bucket" {
+  bucket = "${var.layer}-${var.stack_id}-images-bucket"
   acl    = "private"
 
   tags = {
-    Name = "${var.layer}-${var.stack_id}-artifacts-bucket"
+    Name = "${var.layer}-${var.stack_id}-images-bucket"
     Environment = "${var.stack_id}"
   }
 }

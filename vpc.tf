@@ -13,3 +13,11 @@ resource "aws_vpc" "main" {
       Name = "${var.layer}-${var.stack_id}-vpc"
   }
 }
+
+resource "aws_db_subnet_group" "subnet_group_ticket" {
+  name       = "${var.layer}-${var.stack_id}-subnet-group"
+  subnet_ids = [aws_subnet.public1.id, aws_subnet.public2.id,aws_subnet.public3.id]
+  tags = {
+    Name = "My DB Subnet Group"
+  }
+}

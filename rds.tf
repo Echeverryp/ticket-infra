@@ -1,4 +1,4 @@
-/*resource "aws_db_instance" "rds_emisor" {
+resource "aws_db_instance" "ticket_rds" {
   identifier                  = "${var.layer}-${var.stack_id}-db"
   allocated_storage    = 10
   db_name              = "ticket"
@@ -10,5 +10,5 @@
   publicly_accessible = true
   multi_az                    = false
   skip_final_snapshot  = true
-  db_subnet_group_name=aws_db_subnet_group.subnet_group_emisor.name
-}*/
+ db_subnet_group_name=aws_db_subnet_group.subnet_group_ticket.name
+}
