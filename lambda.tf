@@ -1,21 +1,10 @@
-resource "aws_lambda_function" "lambda_sender_event" {
-  depends_on    = [aws_s3_bucket.artifacts_bucket]
+resource "aws_lambda_function" "lambda_secure_headers_event" {
   filename      = data.archive_file.lambda_zip_inline.output_path
-  function_name = "${var.layer}-${var.stack_id}-lambda-test"
+  function_name = "${var.layer}-${var.stack_id}-lambda-headers"
   handler       = "dist/functions/function.handler"
   role          = aws_iam_role.lambda.arn
-  timeout       = "30"
-  memory_size   = "768"
+  timeout       = "5"
+  memory_size   = "128"
   runtime       = "nodejs16.x"
-  vpc_config {
-    # Every subnet should be able to reach an EFS mount target in the same Availability Zone. Cross-AZ mounts are not permitted.
-    subnet_ids         = [aws_subnet.private1.id,aws_subnet.private2.id,aws_subnet.private3.id]
-    security_group_ids = [aws_security_group.sg.id]
-  }
-  environment {
-    variables = {
-      StackId = "${var.stack_id}"
-
-    }
-  }
+  publish = true
 }

@@ -10,5 +10,6 @@ resource "aws_db_instance" "ticket_rds" {
   publicly_accessible = true
   multi_az                    = false
   skip_final_snapshot  = true
+  vpc_security_group_ids= [aws_security_group.sg.id]
  db_subnet_group_name=aws_db_subnet_group.subnet_group_ticket.name
 }

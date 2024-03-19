@@ -21,13 +21,13 @@ data "archive_file" "lambda_zip_inline" {
   output_path = "/tmp/lambda_zip_inline.zip"
   source {
     content  = <<EOF
-export const handler = async (event) => {
-  // TODO implement
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify('Hello from Lambda!'),
-  };
-  return response;
+'use strict';
+exports.handler = (event, context, callback) => {
+  const request = event.Records[0].cf.request;
+  // replace dangling / in the url with /index.html
+  request.uri = request.uri.replace(//$/, '/index.html');
+  // return to Cloudfront
+  return callback(null, request);
 };
 
 EOF
