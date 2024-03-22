@@ -1,14 +1,18 @@
 resource "aws_s3_bucket" "s3_front" {
   bucket = "${var.layer}-${var.stack_id}-bucket-front"
+
   tags = {
     Name        = "Front bucket"
     Environment = "${var.stack_id}"
   }
 }
 
+
+
 resource "aws_s3_bucket" "images_bucket" {
   bucket = "${var.layer}-${var.stack_id}-images-bucket"
   acl   =  "private"
+
   tags = {
     Name = "${var.layer}-${var.stack_id}-images-bucket"
     Environment = "${var.stack_id}"
@@ -115,7 +119,7 @@ resource "aws_cloudfront_distribution" "my_distribution" {
     custom_origin_config {
         http_port              = "80"
         https_port             = "443"
-        origin_protocol_policy = "https-only"
+        origin_protocol_policy = "http-only"
         origin_ssl_protocols   = ["TLSv1.2"]
       }
     domain_name              = local.s3_domain_name
@@ -142,7 +146,7 @@ resource "aws_cloudfront_distribution" "my_distribution" {
     default_ttl            = 86400
     max_ttl                = 31536000
     compress               = true
-    viewer_protocol_policy = "redirect-to-https"
+    viewer_protocol_policy = "allow-all"
   }
 
     # Cache behavior with precedence 1
@@ -151,11 +155,6 @@ resource "aws_cloudfront_distribution" "my_distribution" {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.s3_origin_id
-    lambda_function_association {
-      event_type   = "viewer-request"
-      lambda_arn   = "${aws_lambda_function.lambda_secure_headers_event.arn}:${aws_lambda_function.lambda_secure_headers_event.version}"
-      include_body = false
-    }
 
     forwarded_values {
       query_string = false
@@ -169,7 +168,7 @@ resource "aws_cloudfront_distribution" "my_distribution" {
     default_ttl            = 3600
     max_ttl                = 86400
     compress               = true
-    viewer_protocol_policy = "redirect-to-https"
+    viewer_protocol_policy = "allow-all"
   }
 
   restrictions {
@@ -185,5 +184,4 @@ resource "aws_cloudfront_distribution" "my_distribution" {
    viewer_certificate {
     cloudfront_default_certificate = true
   }
-   depends_on = [aws_lambda_function.lambda_secure_headers_event, aws_iam_role.lambda]
 }
