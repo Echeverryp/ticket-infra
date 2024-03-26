@@ -1,17 +1,16 @@
 ---
-name: Build and deploy
+name: Build and deploy Terraform
 on:
   push:
-    branches: [ dev , stage, master]
+    branches: [ develop , stage, master]
 jobs:
   build-and-deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
     env:
-      BUCKET: ${{ github.ref == 'refs/heads/develop' && 'dev-ticket-bucket-front' || github.ref == 'refs/heads/stage' &&'stage-ticket-bucket-front' || github.ref == 'refs/heads/master' &&'prod-ticket-bucket-front' }}
-      DIST: build
+      VAR_FILE: ${{ github.ref == 'refs/heads/develop' && 'env.dev.tfvars' || github.ref == 'refs/heads/stage' && 'env.stage.tfvars' || github.ref == 'refs/heads/master' && 'env.prod.tfvars' }}
       REGION: us-east-1
-      DIST_ID: ${{ github.ref == 'refs/heads/develop' && 'E2AS4SP1SGS71N' || github.ref == 'refs/heads/stage' && 'STG_ID_CLOUDFRONT' || github.ref == 'refs/heads/master' && 'STG_ID_CLOUDFRONT' }}
+      PLAN: ${{ github.ref == 'refs/heads/develop' && 'dev' || github.ref == 'refs/heads/stage' && 'stage' || github.ref == 'refs/heads/master' && 'prod' }}
       ACCESS_KEY: AKIA5FTZAIMGGYXFE5NJ
       SECRET_KEY: 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
 
@@ -31,3 +30,11 @@ jobs:
 
     - name: Terraform validate
       run: terraform validate
+
+    - name: Terraform plan 
+      run: terraform plan -var-file=environment/${{ env.PLAN }}/${{ env.VAR_FILE }} -out=${{ env.PLAN }} -input=false
+
+    - name: Terraform apply 
+      run: terraform apply ${{ env.PLAN }}
+
+     
