@@ -16,39 +16,38 @@ variable "region" {
   description = "AWS Region"
 }
 
-data "archive_file" "lambda_zip_inline" {
-  type        = "zip"
-  output_path = "/tmp/lambda_zip_inline.zip"
-  source {
-    content  = <<EOF
-'use strict';
+variable "db_name" {
+  type        = string
+  default     = "ticket"
+  description = "DB Name"
+}
 
-const querystring = require('querystring');
-exports.handler = (event, context, callback) => {
-    const request = event.Records[0].cf.request;
-    
-    /* When a request contains a query string key-value pair but the origin server
-     * expects the value in a header, you can use this Lambda function to
-     * convert the key-value pair to a header. Here's what the function does:
-     * 1. Parses the query string and gets the key-value pair.
-     * 2. Adds a header to the request using the key-value pair that the function got in step 1.
-     */
+variable "engine_db" {
+  type        = string
+  default     = "postgres"
+  description = "Engine for DB"
+}
 
-    /* Parse request querystring to get javascript object */
-    const params = querystring.parse(request.querystring);
+variable "engine_version_db" {
+  type        = string
+  default     = "13.13"
+  description = "Version for DB"
+}
 
-    /* Move auth param from querystring to headers */
-    const headerName = 'Auth-Header';
-    request.headers[headerName.toLowerCase()] = [{ key: headerName, value: params.auth }];
-    delete params.auth;
+variable "instance_class_db" {
+  type        = string
+  default     = "db.t3.micro"
+  description = "Instance for DB"
+}
 
-    /* Update request querystring */
-    request.querystring = querystring.stringify(params);
+variable "user_db" {
+  type        = string
+  default     = "adminticket"
+  description = "User for DB"
+}
 
-    callback(null, request);
-};
-
-EOF
-    filename = "main.js"
-  }
+variable "password_db" {
+  type        = string
+  default     = "adminticket"
+  description = "Password DB"
 }

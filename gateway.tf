@@ -93,7 +93,6 @@ resource "aws_route_table" "vpc_private_subnet3_routing_table" {
 
 }
 
-# Explicitely associate the newly created route tables to the private subnets (so they don't default to the main route table)
 resource "aws_route_table_association" "vpc_public_subnet1_routing_table_association" {
   subnet_id      = aws_subnet.public1.id
   route_table_id = aws_route_table.vpc_public_subnet1_routing_table.id
