@@ -1,5 +1,5 @@
 //LAMBDA
-/*resource "aws_iam_role" "lambda" {
+resource "aws_iam_role" "lambda" {
   name = "${var.layer}-${var.stack_id}-role-lambda"
 
   assume_role_policy = <<-EOF
@@ -114,4 +114,3 @@ resource "aws_iam_role_policy" "AWSLambdaRole" {
 
 
 
-*/

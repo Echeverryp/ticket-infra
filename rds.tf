@@ -1,4 +1,4 @@
-/*resource "aws_db_instance" "ticket_rds" {
+resource "aws_db_instance" "ticket_rds" {
   identifier                  = "${var.layer}-${var.stack_id}-db"
   allocated_storage    = 10
   db_name              = "${var.db_name}"
@@ -12,4 +12,4 @@
   skip_final_snapshot  = true
   vpc_security_group_ids= [aws_security_group.sg.id]
  db_subnet_group_name=aws_db_subnet_group.subnet_group_ticket.name
-}*/
+}
