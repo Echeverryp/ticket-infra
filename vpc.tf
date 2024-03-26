@@ -2,7 +2,7 @@
 ### Network
 
 # Fetch AZs in the current region
-data "aws_availability_zones" "available" {}
+/*data "aws_availability_zones" "available" {}
 
 resource "aws_vpc" "main" {
   cidr_block = "10.1.0.0/16"
@@ -20,4 +20,4 @@ resource "aws_db_subnet_group" "subnet_group_ticket" {
   tags = {
     Name = "My DB Subnet Group"
   }
-}
+}*/

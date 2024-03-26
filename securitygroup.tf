@@ -1,6 +1,6 @@
 # ALB Security group
 # This is the group you need to edit if you want to restrict access to your application
-resource "aws_security_group" "sg" {
+/*resource "aws_security_group" "sg" {
   name        = "${var.layer}-${var.stack_id}-sg"
   description = "controls access sg"
   vpc_id      = aws_vpc.main.id
@@ -42,4 +42,4 @@ ingress {
     protocol  = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
+}*/

@@ -1,4 +1,4 @@
-resource "aws_eip" "gw" {
+/*resource "aws_eip" "gw" {
   tags = {
     Name = "${var.layer}-${var.stack_id}-elastic"
   }
@@ -121,4 +121,4 @@ resource "aws_route_table_association" "vpc_private_subnet2_routing_table_associ
 resource "aws_route_table_association" "vpc_private_subnet3_routing_table_association" {
   subnet_id      = aws_subnet.private3.id
   route_table_id = aws_route_table.vpc_private_subnet3_routing_table.id
-}
+}*/
