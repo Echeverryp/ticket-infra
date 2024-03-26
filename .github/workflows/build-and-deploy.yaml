@@ -1,0 +1,33 @@
+---
+name: Build and deploy
+on:
+  push:
+    branches: [ develop , stage, master]
+jobs:
+  build-and-deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    env:
+      BUCKET: ${{ github.ref == 'refs/heads/develop' && 'dev-ticket-bucket-front' || github.ref == 'refs/heads/stage' &&'stage-ticket-bucket-front' || github.ref == 'refs/heads/master' &&'prod-ticket-bucket-front' }}
+      DIST: build
+      REGION: us-east-1
+      DIST_ID: ${{ github.ref == 'refs/heads/develop' && 'E2AS4SP1SGS71N' || github.ref == 'refs/heads/stage' && 'STG_ID_CLOUDFRONT' || github.ref == 'refs/heads/master' && 'STG_ID_CLOUDFRONT' }}
+      ACCESS_KEY: AKIA5FTZAIMGGYXFE5NJ
+      SECRET_KEY: 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
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ env.ACCESS_KEY }}
+        aws-secret-access-key: ${{ env.SECRET_KEY }}
+        aws-region: ${{ env.REGION }}
+        
+    - name: Init terraform
+      run: terraform init
+
+    - name: Terraform validate
+      run: terraform validate
