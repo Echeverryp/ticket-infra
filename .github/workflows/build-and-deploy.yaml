@@ -13,7 +13,7 @@ jobs:
       PLAN: ${{ github.ref == 'refs/heads/develop' && 'dev' || github.ref == 'refs/heads/stage' && 'stage' || github.ref == 'refs/heads/master' && 'prod' }}
       ACCESS_KEY: AKIA5FTZAIMGGYXFE5NJ
       SECRET_KEY: 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
-
+      BUCKET_NAME: tickets-bucket-terraform-state
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -24,7 +24,22 @@ jobs:
         aws-access-key-id: ${{ env.ACCESS_KEY }}
         aws-secret-access-key: ${{ env.SECRET_KEY }}
         aws-region: ${{ env.REGION }}
+
+    - name: Check if bucket exists and create if not
+      run: |
+        bucket_name="bucket-terraform-state"
+        bucket_exists=$(aws s3api head-bucket --bucket "$bucket_name" --region "${{ env.REGION }}" 2>&1)
+        if [[ $bucket_exists =~ "Not Found" ]]; then
+            aws s3api create-bucket --bucket ${{ env.BUCKET_NAME }} --region ${{ env.REGION }}
+            aws s3api put-bucket-versioning --bucket ${{ env.BUCKET_NAME }} --versioning-configuration Status=Enabled
+            aws s3api put-bucket-encryption --bucket ${{ env.BUCKET_NAME }} --server-side-encryption-configuration '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"}}]}'
+        else
+            echo "The bucket already exists, no need to create"
+        fi
         
+    - name: Creating bucket for tf state 
+      run: terraform init
+
     - name: Init terraform
       run: terraform init
 
