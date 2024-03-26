@@ -8,10 +8,32 @@ resource "aws_s3_bucket" "s3_front" {
 }
 
 
+resource "aws_s3_bucket" "terraform_bucket" {
+  bucket = "bucket-terraform-state"
+
+}
+
+resource "aws_bucket_versioning" "terraform_bucket_version" {
+  bucket = aws_s3_bucket.terraform_bucket.id
+  versioning_configuration{
+    status="Enabled"
+  }
+
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state_encrip" {
+  bucket = aws_s3_bucket.terraform_bucket.id
+  rule{
+    apply_server_side_encryption_by_default{
+      sse_algorithm ="AES256"
+    }
+  }
+
+}
 
 resource "aws_s3_bucket" "images_bucket" {
   bucket = "${var.layer}-${var.stack_id}-images-bucket"
-  acl   =  "private"
+  acl   =  "public-read"
 
   tags = {
     Name = "${var.layer}-${var.stack_id}-images-bucket"
@@ -90,7 +112,7 @@ locals {
   s3_origin_id   = "${var.layer}-${var.stack_id}-bucket-front-origin"
   s3_domain_name = "${var.layer}-${var.stack_id}-bucket-front.s3-website-${var.region}.amazonaws.com"
 }
-
+/*
 resource "aws_cloudfront_distribution" "my_distribution" {
   origin {
     custom_origin_config {
