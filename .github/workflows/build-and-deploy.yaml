@@ -27,8 +27,7 @@ jobs:
 
     - name: Check if bucket exists and create if not
       run: |
-        bucket_name="bucket-terraform-state"
-        bucket_exists=$(aws s3api head-bucket --bucket "$bucket_name" --region "${{ env.REGION }}" 2>&1)
+        bucket_exists=$(aws s3api head-bucket --bucket ${{ env.BUCKET_NAME }} --region ${{ env.REGION }} 2>&1)
         if [[ $bucket_exists =~ "Not Found" ]]; then
             aws s3api create-bucket --bucket ${{ env.BUCKET_NAME }} --region ${{ env.REGION }}
             aws s3api put-bucket-versioning --bucket ${{ env.BUCKET_NAME }} --versioning-configuration Status=Enabled
