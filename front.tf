@@ -84,7 +84,7 @@ resource "aws_s3_bucket_website_configuration" "web_site_config_s3_front" {
   }
 
 }
-/*
+
 locals {
   s3_origin_id   = "${var.layer}-${var.stack_id}-bucket-front-origin"
   s3_domain_name = "${var.layer}-${var.stack_id}-bucket-front.s3-website-${var.region}.amazonaws.com"
@@ -160,4 +160,4 @@ resource "aws_cloudfront_distribution" "my_distribution" {
    viewer_certificate {
     cloudfront_default_certificate = true
   }
-}*/
+}
