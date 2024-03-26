@@ -1,6 +1,6 @@
 
 # Create var.az_count private subnets, each in a different AZ
-resource "aws_subnet" "private1" {
+/*resource "aws_subnet" "private1" {
   cidr_block        = "10.1.1.0/24"
   availability_zone = "${var.region}a"
   vpc_id            = aws_vpc.main.id
@@ -57,3 +57,4 @@ resource "aws_subnet" "public3" {
       Name = "${var.layer}-${var.stack_id}-subnet-public3"
   }
 }
+*/

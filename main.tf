@@ -1,9 +1,9 @@
 terraform{
   backend "s3"{
-    bucket="bucket-terraform-state"
+    bucket="tickets-bucket-terraform-state"
     key ="tf-infra/terraform.tfstate"
     region  = "us-east-1"
-    encrypt=true
+    shared_credentials_file = "~/.aws/credentials"
   }
 }
 
