@@ -8,9 +8,10 @@ resource "aws_s3_bucket" "s3_front" {
 }
 
 
+
 resource "aws_s3_bucket" "images_bucket" {
   bucket = "${var.layer}-${var.stack_id}-images-bucket"
-  acl   =  "public-read"
+  acl   =  "private"
 
   tags = {
     Name = "${var.layer}-${var.stack_id}-images-bucket"
@@ -26,7 +27,6 @@ resource "aws_s3_bucket_public_access_block" "s3_front_acess_control" {
   ignore_public_acls      = false
   restrict_public_buckets = false
 }
-
 
 resource "aws_s3_bucket_cors_configuration" "s3_front_cors" {
   bucket = aws_s3_bucket.s3_front.id  
