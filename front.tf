@@ -28,29 +28,6 @@ resource "aws_s3_bucket_public_access_block" "s3_front_acess_control" {
   restrict_public_buckets = false
 }
 
-/*resource "aws_s3_bucket_public_access_block" "s3_image_acess_control" {
-  bucket = aws_s3_bucket.prod_media.id
-
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
-
-
-resource "aws_s3_bucket_ownership_controls" "s3_image_ownership" {
-  bucket = aws_s3_bucket.images_bucket.id
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
-  depends_on = [aws_s3_bucket_public_access_block.example]
-}
-
-resource "aws_s3_bucket_acl" "acl_image_bucket" {
-    bucket = aws_s3_bucket.images_bucket.id
-    acl    = "public-read"
-    depends_on = [aws_s3_bucket_ownership_controls.s3_bucket_acl_ownership]
-}
-}*/
 
 resource "aws_s3_bucket_cors_configuration" "s3_front_cors" {
   bucket = aws_s3_bucket.s3_front.id  
@@ -81,15 +58,15 @@ resource "aws_s3_bucket_policy" "s3_front_bucket_policy" {
     ]
   })
   
-  depends_on = [aws_s3_bucket_public_access_block.s3_front_acess_control]
+  depends_on = [aws_s3_bucket_public_access_block.s3_front_acess_control,aws_s3_bucket_cors_configuration.s3_front_cors ]
 }
 
 resource "aws_s3_bucket_ownership_controls" "s3_front_ownership" {
   bucket = aws_s3_bucket.s3_front.id
   rule {
-    object_ownership = "BucketOwnerPreferred"
+    object_ownership = "ObjectWriter"
   }
-  depends_on = [aws_s3_bucket_public_access_block.s3_front_acess_control]
+  depends_on = [aws_s3_bucket_public_access_block.s3_front_acess_control, aws_s3_bucket_policy.s3_front_bucket_policy]
 }
 
 
