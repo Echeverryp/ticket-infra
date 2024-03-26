@@ -36,9 +36,7 @@ jobs:
         else
             echo "The bucket already exists, no need to create"
         fi
-        
-    - name: Creating bucket for tf state 
-      run: terraform init
+
 
     - name: Init terraform
       run: terraform init
